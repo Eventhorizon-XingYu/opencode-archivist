@@ -1,0 +1,66 @@
+{
+  "name": "opencode-archivist",
+  "version": "0.1.0",
+  "description": "OpenCode plugin that archives chat sessions into readable, searchable Markdown files with summaries and a master index.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./server": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./tui": {
+      "import": "./dist/tui.js",
+      "types": "./dist/tui.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "node --import tsx --test \"test/*.test.ts\"",
+    "integration": "tsx scripts/integration.ts",
+    "smoke": "node scripts/smoke.mjs",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "opencode",
+    "plugin",
+    "archive",
+    "markdown",
+    "session",
+    "ai-agent",
+    "obsidian"
+  ],
+  "license": "MIT",
+  "author": "WangJinang99 <yiw977494@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WangJinang99/opencode-archivist.git"
+  },
+  "homepage": "https://github.com/WangJinang99/opencode-archivist#readme",
+  "bugs": {
+    "url": "https://github.com/WangJinang99/opencode-archivist/issues"
+  },
+  "devDependencies": {
+    "@opencode-ai/plugin": "1.18.16",
+    "@opentui/core": "^0.4.5",
+    "@opentui/keymap": "^0.4.5",
+    "@opentui/solid": "^0.4.5",
+    "@types/node": "^24.12.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.8.2"
+  }
+}
