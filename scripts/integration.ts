@@ -94,7 +94,9 @@ try {
   // Verify every relative link in the index resolves to a real file.
   for (const match of index.matchAll(/\]\(([^)]+\.md)\)/g)) {
     const rel = match[1]!;
-    const target = join(root, rel.replaceAll("/", "\\"));
+    // Markdown links always use `/`; split into path segments so the check
+    // works with the native separator on both Windows and POSIX hosts.
+    const target = join(root, ...rel.split("/"));
     await readFile(target, "utf8");
   }
 

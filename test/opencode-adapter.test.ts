@@ -188,4 +188,18 @@ describe("OpenCodeAdapter", () => {
     assert.deepEqual(record!.messages, []);
     assert.deepEqual(record!.todos, []);
   });
+
+  it("S1c normalizes POSIX directory separators on every host", async () => {
+    const client: SessionClient = {
+      get: async () => ({ ...FIXTURE_SESSION, directory: "/home/user/my-app" }),
+      messages: async () => [],
+      todo: async () => [],
+    };
+
+    const adapter = new OpenCodeAdapter(client);
+    const record = await adapter.getSessionRecord("ses_1");
+
+    assert.ok(record);
+    assert.equal(record!.projectName, "my-app");
+  });
 });

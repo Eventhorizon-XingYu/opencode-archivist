@@ -6,7 +6,7 @@
  * mirror a subset of `@opencode-ai/sdk`, so tests supply fixtures directly
  * and a future plugin wires the real SDK client at the composition root.
  */
-import { basename } from "node:path";
+import { basename } from "node:path/posix";
 
 import type {
   AgentAdapter,
@@ -21,6 +21,18 @@ import type {
 
 /** Cap on rendered tool input/output kept in the archive (chars). */
 const RENDER_LIMIT = 500;
+
+/**
+ * Return a stable project name for paths received from any host OS.
+ *
+ * OpenCode may provide a Windows path even when the plugin is being tested or
+ * processed on Linux. Normalising both separators before taking the basename
+ * keeps archive folder names consistent across platforms.
+ */
+export function projectNameFromDirectory(directory: string): string {
+  const normalized = directory.replaceAll("\\", "/");
+  return basename(normalized) || "untitled";
+}
 
 /** Truncate a rendered value so oversized tool payloads stay readable. */
 function truncate(value: string, max = RENDER_LIMIT): string {
@@ -111,7 +123,7 @@ export class OpenCodeAdapter implements AgentAdapter {
     const todos = rawTodos ?? [];
 
     const project = session.directory ?? "";
-    const projectName = project === "" ? "untitled" : basename(project);
+    const projectName = projectNameFromDirectory(project);
 
     const mappedMessages = messages.map(mapMessage);
     const toolCallCount = mappedMessages.reduce(

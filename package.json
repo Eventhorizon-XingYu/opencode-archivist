@@ -30,7 +30,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json",
-    "test": "node --import tsx --test \"test/*.test.ts\"",
+    "test": "node scripts/test-runner.mjs",
     "integration": "tsx scripts/integration.ts",
     "smoke": "node scripts/smoke.mjs",
     "check": "npm run typecheck && npm test && npm run integration",
