@@ -35,8 +35,28 @@ No database, no JSON warehouse, no runtime dependencies. Just Markdown files.
 
 ## Install
 
-Install the plugin from npm and add it to your OpenCode config
-(`~/.config/opencode/opencode.json`):
+### Recommended: install from npm
+
+After the package is published, install it with OpenCode's built-in plugin
+installer:
+
+```bash
+opencode plugin opencode-archivist
+```
+
+Use `-g` / `--global` to install it for every project:
+
+```bash
+opencode plugin --global opencode-archivist
+```
+
+The installer registers the package and OpenCode installs it automatically at
+startup. Restart OpenCode after installation.
+
+### Manual configuration
+
+If your OpenCode version does not provide the plugin installer, add the npm
+package to `opencode.json` (project-level or global):
 
 ```json
 {
@@ -45,7 +65,51 @@ Install the plugin from npm and add it to your OpenCode config
 }
 ```
 
-OpenCode installs npm plugins automatically with Bun on startup.
+For the optional TUI command, add the same package to `tui.json` as well:
+
+```json
+{
+  "$schema": "https://opencode.ai/tui.json",
+  "plugin": ["opencode-archivist"]
+}
+```
+
+The package contains separate `server` and `tui` entrypoints, as required by
+OpenCode's plugin loader.
+
+### Install from GitHub source
+
+This path is useful for contributors or when you want to use unreleased
+changes:
+
+```bash
+git clone https://github.com/WangJinang99/opencode-archivist.git
+cd opencode-archivist
+npm ci
+npm run build
+```
+
+Then register the cloned directory in both `opencode.json` and, if desired,
+`tui.json`:
+
+```json
+{
+  "plugin": ["file:///absolute/path/to/opencode-archivist"]
+}
+```
+
+On Windows, use a file URL such as
+`file:///D:/tools/opencode-archivist`. Register the directory, not
+`dist/index.js`, so OpenCode can resolve both entrypoints.
+
+No API key, paid service, or separate runtime dependency is required.
+
+### Data and privacy
+
+The plugin writes transcripts to local disk only. It does not upload sessions
+to GitHub or any other service. By default the archive is stored in
+`~/.opencode/archive`; review the archive directory before syncing it to a
+repository or cloud drive because it can contain private conversation text.
 
 ### Configuration
 
@@ -245,13 +309,19 @@ export interface AgentAdapter {
 Requires Node.js ≥ 20.
 
 ```bash
-npm install          # install dev dependencies
+npm ci                # reproducible install from package-lock.json
+npm run check         # typecheck + unit tests + integration test
 npm run typecheck    # strict TypeScript check (src + test + scripts)
 npm test             # unit tests (node:test via tsx)
 npm run build        # compile to dist/
 npm run integration  # real-surface check: writes files + index from a mock client
 npm run smoke        # load-contract check + `opencode serve` smoke
+npm run package:check # verify the publishable npm package contents
 ```
+
+`npm run smoke` needs an `opencode` executable for its optional server check;
+the deterministic load-contract check still runs when OpenCode is not
+installed.
 
 Project structure:
 

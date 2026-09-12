@@ -33,7 +33,10 @@
     "test": "node --import tsx --test \"test/*.test.ts\"",
     "integration": "tsx scripts/integration.ts",
     "smoke": "node scripts/smoke.mjs",
-    "prepublishOnly": "npm run build"
+    "check": "npm run typecheck && npm test && npm run integration",
+    "package:check": "npm run build && npm pack --dry-run",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run check && npm run build"
   },
   "keywords": [
     "opencode",

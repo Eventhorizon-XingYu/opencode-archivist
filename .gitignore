@@ -1,5 +1,9 @@
 node_modules/
+.npm-cache/
 dist/
 .archive/
 *.log
 .DS_Store
+.env
+.env.*
+!.env.example

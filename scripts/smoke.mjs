@@ -68,7 +68,7 @@ try {
   ]);
 
   if (result.kind === "exit") {
-    console.warn(`serve smoke: opencode exited early (code ${result.code}) — may be env-related; treating as skip`);
+    console.warn(`serve smoke: opencode exited early (code ${result.code}) — treating the optional server check as skipped`);
   } else {
     console.log("serve smoke OK: opencode serve stayed up 10s with plugin loaded");
     child.kill();
@@ -88,4 +88,4 @@ try {
   }
 }
 
-console.log("SMOKE PASS");
+console.log("SMOKE PASS (load-contract checks passed; server check may be skipped when OpenCode is unavailable)");
